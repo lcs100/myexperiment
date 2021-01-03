@@ -1,0 +1,58 @@
+Input：mining algorithm
+
+for i in (0, total_cycle):
+    if loop == 1:
+        loop++
+        MineFindMainBlock()
+
+        if receiveMicroProofFromOtherNodes():
+            if verifyMicroProof():
+                appendNodesInfoToSecondNodeList()
+                goto MineFindMainBlock()
+        
+        if findNonce():
+            createMainBlock()
+            announceBlock()
+            waitForResponse()
+            if reponseNumber > threshold:
+                appendMainBlockToChain()
+                goto loop2
+                sleep()
+            else:
+                goto MineFindMainBlock()
+
+        if receiveMainBlockFromOtherNodes():
+            if verifyMainBlock():
+                appendMainBlockToChain()
+                announceValid()
+                if nodeHasMicroProof():
+                    goto loop2
+                else:
+                    sleep()
+
+        if findMicroProofNonce():
+            createMicroProof()
+            announceMicroProof()
+            appendItselfToSecondNodeList()
+            goto MineFindMainBlock()
+    
+    if loop == 2:
+        loop--
+        MineFindMicroBlock()
+        if findNonce():
+            createMicroBlock()
+            announceBlock()
+            waitForResponse()
+            if reponseNumber > threshold:
+                appendMicroBlockToChain()
+                goto NextCycle
+
+        if receiveMicroBlockFromOtherNodes():
+            if verifyMicroBlock():
+                appendMicroBlockToChain()
+                announceValid()
+                goto NextCycle
+            else:
+                announceInvalid()
+                goto MineFindMicroBlock
+            
